@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
+require('dotenv/config')
 const imagemSchema = new mongoose.Schema({
     originalname: String,
     size: Number,
@@ -18,8 +19,9 @@ const imagemSchema = new mongoose.Schema({
 
 imagemSchema.pre("save", function () {
     if (!this.url) {
-      // this.url = `${process.env.APP_URL}/files/${this.filename}`;
-      this.url = `http://localhost:5000/files/${this.filename}`;
+
+      this.url = `${process.env.APP_URL}:${process.env.PORT_SERVICE}/files/${this.filename}`;
+      // this.url = `http://localhost:5000/files/${this.filename}`;
     }
     
   });

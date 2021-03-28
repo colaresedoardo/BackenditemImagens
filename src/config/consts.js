@@ -1,5 +1,7 @@
+require('dotenv/config')
 module.exports ={
-    bcryptSalts: process.env.BCRYPTSALTS,
+    bcryptSalts: parseInt(process.env.BCRYPTSALTS),
     keyJWT: process.env.KEYJWT,
-    expiresJWT: process.env.EXPIRESJWT
+    expiresJWT: parseInt( process.env.EXPIRESJWT)
 }
+

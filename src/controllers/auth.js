@@ -8,9 +8,14 @@ class AuthController{
     async create(req, res) {
         try{
             let u = await this.Usuario.findOne({email:req.body.email})
-            if(!u){
+            console.log("tentando criar usuario")
+            console.log(u)
+            console.log(u ===null)
+            if(u===null){
+              console.log("usuario nao cadastrado")
               const user = new this.Usuario(req.body)
               user.password = criptografar(req.body.password)
+            
               await user.save()
               delete user.password
               res.status(200).json(user)
@@ -21,6 +26,7 @@ class AuthController{
                 // res.status(200).send(usuario)
                 // })
             }  else{
+                console.log("entrei no falso")
                 res.status(403).json({message:'email já cadastrado'})
             }
          
@@ -28,6 +34,7 @@ class AuthController{
 
 
         }catch(err){
+          console.log(err)
           res.status(422).send(err.message)
         }
        

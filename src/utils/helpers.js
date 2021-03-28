@@ -15,6 +15,8 @@ module.exports ={
   },
 
   criptografar:(valor)=>{
+    console.log("no login criptografar " + consts.bcryptSalts)
+    console.log(typeof(consts.bcryptSalts))
     return bcrpyt.hashSync(valor, consts.bcryptSalts)
   },
   compararSenha:(senhaReq, senhaDb)=>{

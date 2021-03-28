@@ -1,9 +1,7 @@
 import express from 'express'
 import bodyParse from 'body-parser'
 import routes from './routes'
-require('dotenv').config({  
-    path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env"
-  })
+require('dotenv/config')
 console.log(`iniciando ambiente de ${process.env.NODE_ENV }`)
 const path = require("path");
 const cors = require('cors');
