@@ -161,7 +161,73 @@ class ItemController{
 
     async update(req,res){
       
-       this.Item.findById( req.params.id , (err,item)=>{
+      let idItemPai = req.body.item == '' ? null : req.body.item
+      let iditem =req.params.id 
+      let categoria =req.body.categoria
+      let subitem =req.body.subitem
+      console.log("subitem")
+      console.log(req.body.subitem)
+
+      console.log("categoria")
+      console.log(req.body.categoria)
+      
+      if(idItemPai){
+        console.log("entrei aqui")
+        if(categoria==true){
+          console.log("gerar erro")
+         return  res.status(304).send({message:"Não adicionar categorias a outras categorias"})
+        }
+        this.Item.findById(  idItemPai  , (err,ite)=>{
+          if(err){
+            console.log("erros")
+          }else{      
+          // relaciando o item filho ao item pai
+            // if(categoria)
+            ite.item.push(iditem)
+            ite.categoria =true
+            ite.subitem = false
+
+            ite.save().then(
+              ()=>{
+                this.Item.updateOne({_id:iditem}, {subitem:true}, (err, item)=>{
+                  if(err){
+                    console.log("erros ao alterar pra subitem")
+                  }
+                  else{
+                    console.log("alterado pra subitem true")
+                    this.updateItem(req, res, iditem)
+                    
+                  }
+                })
+                                
+              
+              }
+            ).catch(
+              
+              (e)=>{
+                console.log("deu problema em adiconar subitem")
+                res.status(500).send(e)
+              }
+  
+            )
+          }
+        }) 
+        
+      }
+      else{
+
+        this.updateItem(req, res, iditem)
+
+
+      }
+     
+  
+    
+     
+    }
+    updateItem(req, res,iditem){
+      
+      this.Item.findById( iditem , (err,item)=>{
         if(err){
           console.log("erros")
         }else{      
@@ -179,8 +245,8 @@ class ItemController{
             item.item= req.body.item
             // item.subitem =true
           }else{
-            item.item.push(req.body.item)
-            item.categoria =true
+            // item.item.push(req.body.item)
+            // item.categoria =true
           }
 
         
@@ -188,16 +254,16 @@ class ItemController{
           console.log(item)
           item.save().then(
             (i)=>{
-              this.Item.updateOne({_id:idFilho}, {subitem:true}, (err, item)=>{
-                if(err){
-                  console.log("erros ao alterar pra subitem")
-                }
-                else{
-                  console.log("alterado pra subitem true")
+              // this.Item.updateOne({_id:idFilho}, {subitem:true}, (err, item)=>{
+              //   if(err){
+              //     console.log("erros ao alterar pra subitem")
+              //   }
+              //   else{
+              //     console.log("alterado pra subitem true")
                  
                   
-                }
-              })
+              //   }
+              // })
               res.send(i)
             }
           ).catch(
@@ -210,12 +276,7 @@ class ItemController{
           )
         }
        })
-     
-  
-    
-     
     }
-
 }
 
 export default ItemController
